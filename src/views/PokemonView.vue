@@ -24,7 +24,7 @@ the api url is https://pokeapi.co/api/v2/pokemon/<pokemon_id> -->
                 </v-col>
                 <v-col cols="12" md="6">
                     <v-col v-for="(type, index) in pokemon.types" :key="index">
-                        <PokemonType :type="type" />
+                        <PokemonType :type="type.type.name" />
                     </v-col>
                 </v-col>
             </v-row>

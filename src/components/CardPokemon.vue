@@ -23,7 +23,7 @@
         </v-col>
         <v-col cols="12" md="2" align-self="center">
           <div class="d-inline" v-for="(type, index) in pokemon.types" :key="index">
-            <PokemonType :type="type" />
+            <PokemonType :type="type.type.name" />
           </div>
           <v-spacer />
         </v-col>
