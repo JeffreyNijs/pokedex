@@ -266,9 +266,8 @@ export default {
             return abilities.map((ability) => ability.ability.name).join(", ");
         },
         orderMovesByLevelLearnedAt(moves) {
-            return moves.sort((a, b) => {
-                return a.version_group_details[0].level_learned_at -
-                    b.version_group_details[0].level_learned_at;
+            return moves.filter((move) => move.version_group_details[0].level_learned_at > 0).sort((a, b) => {
+                return a.version_group_details[0].level_learned_at - b.version_group_details[0].level_learned_at;
             });
         },
     },
