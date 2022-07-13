@@ -1,5 +1,6 @@
 <template>
     <v-container class="my-5">
+        <h4>{{poke.length}} {{poke.length === 1 ? 'resultaat' : 'resultaten'}}</h4>
         <CardPokemon v-for="pokemon in poke" :key="pokemon.id" :poke="pokemon" />
     </v-container>
 </template>
