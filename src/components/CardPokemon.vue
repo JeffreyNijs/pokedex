@@ -22,7 +22,7 @@
       </v-col>
       <v-col xs2 sm4 md2>
         <div class="d-flex justify-end">
-          <v-icon>mdi-arrow-right</v-icon>
+          <v-icon color="#BABEC2">mdi-chevron-right</v-icon>
         </div>
         <div></div>
       </v-col>
