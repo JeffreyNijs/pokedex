@@ -21,8 +21,12 @@
         </v-col>
       </v-row>
     </v-expand-transition>
-    <PokemonList :poke="filterPokemonById" v-if="idSearch" />
-    <PokemonList :poke="sortFilteredPokemon" :key="sort" v-else />
+    <PokemonList :poke="filterPokemonById"
+      :header="`${filterPokemonById.length} ${filterPokemonById.length === 1 ? 'resultaat' : 'resultaten'}`"
+      v-if="idSearch" />
+    <PokemonList :poke="sortFilteredPokemon" :key="sort"
+      :header="`${sortFilteredPokemon.length} ${sortFilteredPokemon.length === 1 ? 'resultaat' : 'resultaten'}`"
+      v-else />
   </v-container>
 </template>
 
