@@ -9,8 +9,8 @@
         </v-avatar>
       </v-col>
       <v-col xs6 sm4 md2>
-        <div class="text-capitalize">{{ pokemon.name }}</div>
-        <div>Nr. {{ zeroPad() }}</div>
+        <div class="text-capitalize font-weight-bold">{{ pokemon.name }}</div>
+        <div><span class="text-gray font-weight-light">Nr. {{ zeroPad() }}</span></div>
       </v-col>
       <v-col xs6 sm4 md2>
         <div>
