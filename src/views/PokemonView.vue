@@ -154,7 +154,7 @@
                         <span class="font-weight-bold">{{ pokemon.weight / 10 }} kg</span>
                     </v-col>
                 </v-row>
-                <v-row>
+                <!-- <v-row>
                     <v-col xs12 md6>
                         <span class="statName">
                             Categorie
@@ -173,7 +173,7 @@
                     <v-col xs12 md6>
                         <span class="font-weight-bold">{{ pokemon.gender }} NOT IN API</span>
                     </v-col>
-                </v-row>
+                </v-row> -->
                 <v-row>
                     <v-col xs12 md6>
                         <span class="statName">
@@ -232,6 +232,7 @@
 import PokemonType from "@/components/PokemonType.vue";
 import zeroPad from "@/utils/ZeroPad";
 import axios from "axios";
+import { mapActions } from "vuex";
 export default {
     name: "PokemonView",
     components: {
@@ -245,7 +246,8 @@ export default {
         };
     },
     methods: {
-        async getPokemon() {
+        ...mapActions(["getPokemon"]),
+        async getPokemonDetails() {
             let id = this.$route.params.id;
             try {
                 let details = await axios.get(
@@ -269,7 +271,11 @@ export default {
         },
     },
     created() {
-        this.getPokemon();
+        if (isNaN(this.$route.params.id)) {
+            this.getPokemon();
+            this.pokemon = this.$store.state.pokemon.find((pokemon) => pokemon.id == this.$route.params.id);
+        }
+        this.getPokemonDetails();
     },
 };
 </script>
