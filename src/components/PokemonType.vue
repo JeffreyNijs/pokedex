@@ -13,17 +13,13 @@ export default {
 
 <style>
 .pkm-type {
-    font-size: 15px;
-
-    font-family: 'Trebuchet MS';
-    font-weight: bold;
-    width: 6em;
+    font-size: 12px;
+    font-weight: 400;
+    width: 56px;
     text-align: center;
     display: inline-block;
-    border: .1em solid transparent;
-    padding: .1em .2em .2em;
-    margin: .1em .015em;
-    border-radius: .4em;
+    padding: 3px 10px;
+    border-radius: 100px;
 }
 
 .pkm-type span {

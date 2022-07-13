@@ -119,7 +119,7 @@
                         </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <div class="d-inline" v-for="(type, index) in pokemon.types" :key="index">
+                        <div class="d-inline mr-2" v-for="(type, index) in pokemon.types" :key="index">
                             <PokemonType :type="type.type.name" />
                         </div>
                     </v-col>
