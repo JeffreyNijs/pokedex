@@ -1,5 +1,5 @@
 <template>
-  <v-card :href="`/pokemon/${pokemon.id}`" elevation="4" class="pa-3 my-3">
+  <v-card :href="`/pokemon/${pokemon.id}`" elevation="4" class="pa-3">
     <v-row no-gutters>
       <v-col cols=11>
         <v-row no-gutters>
