@@ -1,26 +1,22 @@
 <template>
-  <v-app class="indigo lighten-5">
-    <v-container>
-      <h1>Pokédex</h1>
-      <v-row class="d-flex" align="center" justify="center">
-        <v-text-field v-model="namePokemon" hide-details prepend-inner-icon="mdi-magnify" single-line
-          label="Pokémon zoeken" />
-        <v-btn @click="showFilters = !showFilters" icon="mdi-filter" x-large color="primary"> </v-btn>
-      </v-row>
-      <v-expand-transition>
-        <!-- {{ types }}
+  <v-container>
+    <h1 class="my-3">Pokédex</h1>
+    <v-text-field v-model="namePokemon" hide-details prepend-inner-icon="mdi-magnify" single-line variant="solo"
+      clearable clear-icon="mdi-delete" density="compact" label="Pokémon zoeken"
+      @click:append="showFilters = !showFilters" :append-icon="types.length ? 'mdi-filter' : 'mdi-filter-outline'" />
+    <v-expand-transition>
+      <!-- {{ types }}
           {{ availableTypesAndCount }} -->
-        <v-row v-show="showFilters" no-gutters>
-          <v-col cols="12" md="2" sm="4" v-for="(value, propertyName) in availableTypesAndCount" :key="propertyName">
-            <v-checkbox hide-details class="ma-0 pa-0 text-capitalize" v-model="types"
-              :label="propertyName + ': ' + value" :value="propertyName">
-            </v-checkbox>
-          </v-col>
-        </v-row>
-      </v-expand-transition>
-      <PokemonList :poke="filterPokemonByType" />
-    </v-container>
-  </v-app>
+      <v-row v-show="showFilters" no-gutters>
+        <v-col cols="12" md="2" sm="4" v-for="(value, propertyName) in availableTypesAndCount" :key="propertyName">
+          <v-checkbox hide-details class="ma-0 pa-0 text-capitalize" v-model="types"
+            :label="propertyName + ': ' + value" :value="propertyName">
+          </v-checkbox>
+        </v-col>
+      </v-row>
+    </v-expand-transition>
+    <PokemonList :poke="filterPokemonByType" />
+  </v-container>
 </template>
 
 <script>
@@ -80,3 +76,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.v-field {
+  border-radius: 100px;
+}
+</style>
