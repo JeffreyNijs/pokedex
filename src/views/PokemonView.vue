@@ -110,11 +110,11 @@
                     </v-sheet>
                 </v-carousel-item>
             </v-carousel>
-            <h4 class="text-capitalize">INFO</h4>
-            <v-card class="pa-3 my-3" rounded elevation="5">
+            <h5>INFO</h5>
+            <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
                 <v-row>
                     <v-col xs12 md6>
-                        <span class="font-weight-light">
+                        <span class="statName">
                             Type
                         </span>
                     </v-col>
@@ -126,7 +126,7 @@
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <span class="font-weight-light">
+                        <span class="statName">
                             Nummer
                         </span>
                     </v-col>
@@ -136,7 +136,7 @@
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <span class="font-weight-light">
+                        <span class="statName">
                             Hoogte
                         </span>
                     </v-col>
@@ -146,7 +146,7 @@
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <span class="font-weight-light">
+                        <span class="statName">
                             Gewicht
                         </span>
                     </v-col>
@@ -156,7 +156,7 @@
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <span class="font-weight-light">
+                        <span class="statName">
                             Categorie
                         </span>
                     </v-col>
@@ -166,7 +166,7 @@
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <span class="font-weight-light">
+                        <span class="statName">
                             Geslacht
                         </span>
                     </v-col>
@@ -176,20 +176,20 @@
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <span class="font-weight-light">
+                        <span class="statName">
                             Vaardigheden
                         </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <span class="text-capitalize">{{ divideAbilitiesByComma(pokemon.abilities) }}</span>
+                        <span class="font-weight-bold">{{ divideAbilitiesByComma(pokemon.abilities) }}</span>
                     </v-col>
                 </v-row>
             </v-card>
-            <h4 class="text-capitalize">Statistieken</h4>
-            <v-card class="pa-3 my-3" rounded elevation="5">
+            <h5>Statistieken</h5>
+            <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
                 <v-row v-for="(stat) in pokemon.stats" :key="stat.stat.name">
                     <v-col xs12 md6>
-                        <span class="font-weight-light text-capitalize">
+                        <span class="statName text-capitalize">
                             {{ stat.stat.name }}
                         </span>
                     </v-col>
@@ -204,11 +204,11 @@
                     </v-col>
                 </v-row>
             </v-card>
-            <h4 class="text-capitalize">Moveset</h4>
-            <v-card class="pa-3 my-3" rounded elevation="5">
+            <h5>Moveset</h5>
+            <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
                 <v-row v-for="(move) in orderMovesByLevelLearnedAt(pokemon.moves)" :key="move.move.name">
                     <v-col xs12 md6>
-                        <span class="font-weight-light text-capitalize">
+                        <span class="statName text-capitalize">
                             {{ move.move.name }}
                         </span>
                     </v-col>
@@ -290,10 +290,16 @@ h3,
 h4,
 h5 {
     color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .short {
     width: 50px;
     justify-content: center;
+}
+
+.statName {
+    color: #ACB2C1;
 }
 </style>
