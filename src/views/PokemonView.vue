@@ -251,12 +251,9 @@ export default {
                 let details = await axios.get(
                     `https://pokeapi.co/api/v2/pokemon/${id}`
                 );
-                console.log(details.data)
                 this.pokemon = details.data;
             } catch (error) {
                 console.log(error);
-            } finally {
-                console.log();
             }
         },
         zeroPad() {
@@ -273,8 +270,6 @@ export default {
     },
     created() {
         this.getPokemon();
-        this.$vuetify.theme.themes.light.primary = '#4caf50'
-        this.$vuetify.theme.themes.dark.primary = '#4caf50'
     },
 };
 </script>
