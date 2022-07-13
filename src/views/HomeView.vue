@@ -2,8 +2,9 @@
   <v-container>
     <h1 class="my-3">Pokédex</h1>
     <v-text-field v-model="namePokemon" hide-details prepend-inner-icon="mdi-magnify" single-line variant="solo"
-      clearable clear-icon="mdi-delete" density="compact" label="Pokémon zoeken"
-      @click:append="showFilters = !showFilters" :append-icon="types.length ? 'mdi-filter' : 'mdi-filter-outline'" />
+      clearable clear-icon="mdi-delete" density="compact" label="Pokémon zoeken" @click:prepend="toggleIdSearch"
+      :prepend-icon="idSearch ? 'mdi-numeric' : 'mdi-alphabetical-variant'" @click:append="toggleFilter"
+      :append-icon="idSearch ? undefined : types.length ? 'mdi-filter' : 'mdi-filter-outline'" />
     <v-expand-transition>
       <!-- {{ types }}
           {{ availableTypesAndCount }} -->
@@ -15,7 +16,8 @@
         </v-col>
       </v-row>
     </v-expand-transition>
-    <PokemonList :poke="filterPokemonByType" />
+    <PokemonList :poke="filterPokemonById" v-if="idSearch" />
+    <PokemonList :poke="filterPokemonByType" v-else />
   </v-container>
 </template>
 
@@ -30,11 +32,18 @@ export default {
     return {
       namePokemon: '',
       showFilters: false,
+      idSearch: false,
       types: [],
     };
   },
   methods: {
     ...mapActions(["getPokemon"]),
+    toggleFilter() {
+      this.showFilters = !this.showFilters;
+    },
+    toggleIdSearch() {
+      this.idSearch = !this.idSearch;
+    },
   },
   computed: {
     ...mapState(["pokemon"]),
@@ -70,15 +79,17 @@ export default {
         });
       });
     },
+    filterPokemonById() {
+      if (!this.namePokemon) {
+        return this.$store.state.pokemon;
+      }
+      return this.$store.state.pokemon.filter(pokemon => {
+        return pokemon.id == this.namePokemon;
+      });
+    },
   },
   created() {
     this.getPokemon();
   },
 }
 </script>
-
-<style scoped>
-.v-field {
-  border-radius: 100px;
-}
-</style>
