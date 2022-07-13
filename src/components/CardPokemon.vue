@@ -1,5 +1,5 @@
 <template>
-  <v-card :href="`/pokemon/${pokemon.id}`" elevation="4" class="pa-3">
+  <v-card :href="`/pokemon/${pokemon.id}`" elevation="4" class="pa-3" min-width="270">
     <v-row no-gutters>
       <v-col cols=11>
         <v-row no-gutters>
@@ -15,7 +15,7 @@
             <div><span class="text-gray font-weight-light">Nr. {{ zeroPad() }}</span></div>
           </v-col>
           <v-col cols=4 xs=4 sm=4>
-            <div class="d-inline mr-2" v-for="(type, index) in pokemon.types" :key="index">
+            <div class="d-inline mr-1" v-for="(type, index) in pokemon.types" :key="index">
               <PokemonType :type="type.type.name" />
             </div>
             <div></div>

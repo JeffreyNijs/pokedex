@@ -13,9 +13,9 @@ export default {
 
 <style>
 .pkm-type {
-    font-size: 12px;
+    font-size: .6em;
     font-weight: 400;
-    width: 56px;
+    width: 5.5em;
     text-align: center;
     display: inline-block;
     padding: 3px 10px;

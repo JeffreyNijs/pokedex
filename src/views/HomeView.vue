@@ -148,3 +148,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.v-text-field {
+  min-width: 270px;
+}
+</style>
