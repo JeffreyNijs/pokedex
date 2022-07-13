@@ -1,30 +1,31 @@
 <template>
   <v-card :href="`/pokemon/${pokemon.id}`" elevation="4" class="pa-3 my-3">
     <v-row no-gutters>
-      <v-col xs12 md6 align-self="center">
-        <v-avatar width="100%" rounded="0">
-          <div v-if="pokemon.sprites">
-            <img class="avatar-pokemon" :src="pokemon.sprites.front_default" alt="" />
-          </div>
-        </v-avatar>
+      <v-col cols=11>
+        <v-row no-gutters>
+          <v-col cols=3 xs=3 sm=2 align-self="center">
+            <v-avatar width="100%" rounded="0">
+              <div v-if="pokemon.sprites">
+                <img class="avatar-pokemon" :src="pokemon.sprites.front_default" alt="" />
+              </div>
+            </v-avatar>
+          </v-col>
+          <v-col cols=5 xs=5 sm=5>
+            <div class="text-capitalize font-weight-bold">{{ pokemon.name }}</div>
+            <div><span class="text-gray font-weight-light">Nr. {{ zeroPad() }}</span></div>
+          </v-col>
+          <v-col cols=4 xs=4 sm=4>
+            <div class="d-inline mr-2" v-for="(type, index) in pokemon.types" :key="index">
+              <PokemonType :type="type.type.name" />
+            </div>
+            <div></div>
+          </v-col>
+        </v-row>
       </v-col>
-      <v-col xs6 sm4 md2>
-        <div class="text-capitalize font-weight-bold">{{ pokemon.name }}</div>
-        <div><span class="text-gray font-weight-light">Nr. {{ zeroPad() }}</span></div>
-      </v-col>
-      <v-col xs6 sm4 md2>
-        <div>
-          <div class="d-inline" v-for="(type, index) in pokemon.types" :key="index">
-            <PokemonType :type="type.type.name" />
-          </div>
-        </div>
-        <div></div>
-      </v-col>
-      <v-col xs2 sm4 md2>
-        <div class="d-flex justify-end">
+      <v-col cols=1>
+        <div class="justify-end chevron">
           <v-icon color="#BABEC2">mdi-chevron-right</v-icon>
         </div>
-        <div></div>
       </v-col>
     </v-row>
   </v-card>
