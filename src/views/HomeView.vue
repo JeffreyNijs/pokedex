@@ -3,8 +3,13 @@
     <h1 class="my-3">Pokédex</h1>
     <v-text-field v-model="namePokemon" hide-details prepend-inner-icon="mdi-magnify" single-line variant="solo"
       clearable clear-icon="mdi-delete" density="compact" label="Pokémon zoeken" @click:prepend="toggleIdSearch"
-      :prepend-icon="idSearch ? 'mdi-numeric' : 'mdi-alphabetical-variant'" @click:append="toggleFilter"
-      :append-icon="idSearch ? undefined : types.length ? 'mdi-filter' : 'mdi-filter-outline'" />
+      :prepend-icon="idSearch ? 'mdi-numeric' : 'mdi-alphabetical-variant'">
+      <template v-slot:append v-if="!idSearch">
+        <v-icon :icon="idSearch ? undefined : types.length ? 'mdi-filter' : 'mdi-filter-outline'"
+          @click="toggleFilter" />
+        <v-icon :icon="sortIcon" @click="toggleSort" />
+      </template>
+    </v-text-field>
     <v-expand-transition>
       <!-- {{ types }}
           {{ availableTypesAndCount }} -->
@@ -17,7 +22,7 @@
       </v-row>
     </v-expand-transition>
     <PokemonList :poke="filterPokemonById" v-if="idSearch" />
-    <PokemonList :poke="filterPokemonByType" v-else />
+    <PokemonList :poke="sortFilteredPokemon" :key="sort" v-else />
   </v-container>
 </template>
 
@@ -32,6 +37,8 @@ export default {
     return {
       namePokemon: '',
       showFilters: false,
+      showSort: false,
+      sort: 'numasc',
       idSearch: false,
       types: [],
     };
@@ -43,6 +50,17 @@ export default {
     },
     toggleIdSearch() {
       this.idSearch = !this.idSearch;
+    },
+    toggleSort() {
+      if (this.sort === 'numasc') {
+        this.sort = 'numdesc';
+      } else if (this.sort === 'numdesc') {
+        this.sort = 'alphaasc';
+      } else if (this.sort === 'alphaasc') {
+        this.sort = 'alphadesc';
+      } else {
+        this.sort = 'numasc';
+      }
     },
   },
   computed: {
@@ -86,6 +104,39 @@ export default {
       return this.$store.state.pokemon.filter(pokemon => {
         return pokemon.id == this.namePokemon;
       });
+    },
+    sortIcon() {
+      if (this.sort === 'numasc') {
+        return 'mdi-sort-ascending';
+      } else if (this.sort === 'numdesc') {
+        return 'mdi-sort-descending';
+      } else if (this.sort === 'alphaasc') {
+        return 'mdi-sort-alphabetical-ascending';
+      } else if (this.sort === 'alphadesc') {
+        return 'mdi-sort-alphabetical-descending';
+      }
+      return 'mdi-sort-alphabetical-ascending';
+    },
+    sortFilteredPokemon() {
+      const pokemon = this.filterPokemonByType;
+      if (this.sort === 'numasc') {
+        return pokemon.sort((a, b) => {
+          return a.id - b.id;
+        });
+      } else if (this.sort === 'numdesc') {
+        return pokemon.sort((a, b) => {
+          return b.id - a.id;
+        });
+      } else if (this.sort === 'alphaasc') {
+        return pokemon.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+      } else if (this.sort === 'alphadesc') {
+        return pokemon.sort((a, b) => {
+          return b.name.localeCompare(a.name);
+        });
+      }
+      return pokemon;
     },
   },
   created() {
