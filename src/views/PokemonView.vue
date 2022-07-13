@@ -114,9 +114,9 @@
             <v-card class="pa-3 my-3" rounded elevation="5">
                 <v-row>
                     <v-col xs12 md6>
-                        <p class="font-weight-light">
+                        <span class="font-weight-light">
                             Type
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
                         <div class="d-inline" v-for="(type, index) in pokemon.types" :key="index">
@@ -126,62 +126,62 @@
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <p class="font-weight-light">
+                        <span class="font-weight-light">
                             Nummer
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <p>{{ zeroPad() }}</p>
+                        <span class="font-weight-bold">{{ zeroPad() }}</span>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <p class="font-weight-light">
+                        <span class="font-weight-light">
                             Hoogte
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <p>{{ pokemon.height / 10 }}m</p>
+                        <span class="font-weight-bold">{{ pokemon.height / 10 }}m</span>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <p class="font-weight-light">
+                        <span class="font-weight-light">
                             Gewicht
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <p>{{ pokemon.weight / 10 }} kg</p>
+                        <span class="font-weight-bold">{{ pokemon.weight / 10 }} kg</span>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <p class="font-weight-light">
+                        <span class="font-weight-light">
                             Categorie
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <p>{{ pokemon.category }} NOT IN API</p>
+                        <span class="font-weight-bold">{{ pokemon.category }} NOT IN API</span>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <p class="font-weight-light">
+                        <span class="font-weight-light">
                             Geslacht
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <p>{{ pokemon.gender }} NOT IN API</p>
+                        <span class="font-weight-bold">{{ pokemon.gender }} NOT IN API</span>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col xs12 md6>
-                        <p class="font-weight-light">
+                        <span class="font-weight-light">
                             Vaardigheden
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <p class="text-capitalize">{{ divideAbilitiesByComma(pokemon.abilities) }}</p>
+                        <span class="text-capitalize">{{ divideAbilitiesByComma(pokemon.abilities) }}</span>
                     </v-col>
                 </v-row>
             </v-card>
@@ -189,14 +189,14 @@
             <v-card class="pa-3 my-3" rounded elevation="5">
                 <v-row v-for="(stat) in pokemon.stats" :key="stat.stat.name">
                     <v-col xs12 md6>
-                        <p class="font-weight-light text-capitalize">
+                        <span class="font-weight-light text-capitalize">
                             {{ stat.stat.name }}
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
-                        <p class="font-weight-bold">
+                        <span class="font-weight-bold">
                             {{ stat.base_stat }}
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
                         <v-progress-linear :model-value="stat.base_stat" background-color="error" color="success">
@@ -208,9 +208,9 @@
             <v-card class="pa-3 my-3" rounded elevation="5">
                 <v-row v-for="(move) in orderMovesByLevelLearnedAt(pokemon.moves)" :key="move.move.name">
                     <v-col xs12 md6>
-                        <p class="font-weight-light text-capitalize">
+                        <span class="font-weight-light text-capitalize">
                             {{ move.move.name }}
-                        </p>
+                        </span>
                     </v-col>
                     <v-col xs12 md6>
                         <v-chip class="short" variant="outlined" align-self="center">
