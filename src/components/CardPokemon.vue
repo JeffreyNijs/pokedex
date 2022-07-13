@@ -5,7 +5,7 @@
         <v-row no-gutters>
           <v-col cols=3 xs=3 sm=2 align-self="center">
             <v-avatar width="100%" rounded="0">
-              <div v-if="pokemon.sprites">
+              <div v-if="pokemon.sprites.front_default">
                 <img class="avatar-pokemon" :src="pokemon.sprites.front_default" alt="" />
               </div>
             </v-avatar>
