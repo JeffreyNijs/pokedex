@@ -1,6 +1,6 @@
 <template>
     <v-app-bar :color="windowTop ? '#FB1B1B' : '#00000000'" :elevation="windowTop ? undefined : 0"
-        :theme="windowTop ? 'dark' : theme ?? 'light'" :collapse="windowTop">
+        :theme="windowTop ? 'dark' : theme ?? 'light'" :collapse="windowTop" :class="windowTop ? undefined : 'v-toolbar-events'">
 
         <v-spacer></v-spacer>
 
@@ -64,5 +64,13 @@ export default {
     -o-transition: all 0.2s linear;
     transition: all 0.2s linear;
     top: initial !important;
+}
+
+.v-toolbar-events {
+    pointer-events: none;
+}
+
+.v-toolbar * {
+    pointer-events: auto !important;
 }
 </style>
