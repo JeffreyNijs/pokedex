@@ -51,7 +51,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getPokemon"]),
+    ...mapActions(["fetchPokemon"]),
     toggleFilter() {
       this.showFilters = !this.showFilters;
     },
@@ -147,7 +147,7 @@ export default {
     },
   },
   created() {
-    this.getPokemon();
+    this.fetchPokemon();
   },
 }
 </script>

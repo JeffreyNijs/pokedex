@@ -48,7 +48,7 @@ export default {
     };
   },
   methods: {
-    async getPokemon() {
+    async fetchPokemon() {
       this.pokemon = this.poke;
     },
     zeroPad() {
@@ -56,7 +56,7 @@ export default {
     }
   },
   created() {
-    this.getPokemon();
+    this.fetchPokemon();
   },
 };
 </script>
