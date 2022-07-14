@@ -1,6 +1,6 @@
 <template>
     <v-container fill-height fluid :class="[pokemon.types[0].type.name, 'animated']">
-        <div v-if="pokemon">
+        <div class="container" v-if="pokemon">
             <h1 class="text-capitalize">{{ pokemon.name }}</h1>
             <v-carousel hide-delimiters :continuous="false" :show-arrows="true" hide-delimiter-background
                 delimiter-icon="mdi-minus" height="300">
@@ -113,74 +113,74 @@
             <h5>INFO</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
                 <v-row>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName">
                             Type
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <div class="d-inline mr-2" v-for="(type, index) in pokemon.types" :key="index">
                             <PokemonType :type="type.type.name" />
                         </div>
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName">
                             Nummer
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="font-weight-bold">{{ zeroPad() }}</span>
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName">
                             Hoogte
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="font-weight-bold">{{ pokemon.height / 10 }}m</span>
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName">
                             Gewicht
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="font-weight-bold">{{ pokemon.weight / 10 }} kg</span>
                     </v-col>
                 </v-row>
                 <!-- <v-row>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName">
                             Categorie
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="font-weight-bold">{{ pokemon.category }} NOT IN API</span>
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName">
                             Geslacht
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="font-weight-bold">{{ pokemon.gender }} NOT IN API</span>
                     </v-col>
                 </v-row> -->
                 <v-row>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName">
                             Vaardigheden
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="font-weight-bold">{{ divideAbilitiesByComma(pokemon.abilities) }}</span>
                     </v-col>
                 </v-row>
@@ -188,17 +188,17 @@
             <h5>Statistieken</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
                 <v-row v-for="(stat) in pokemon.stats" :key="stat.stat.name">
-                    <v-col xs12 md6>
+                    <v-col cols="4" xs="4" sm="4" md="4">
                         <span class="statName text-capitalize">
                             {{ stat.stat.name }}
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col cols=2 xs=2 sm=2 md=2>
                         <span class="font-weight-bold">
                             {{ stat.base_stat }}
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
+                    <v-col cols=6 xs=6 sm=6 md=6>
                         <v-progress-linear :model-value="stat.base_stat" background-color="error" color="success">
                         </v-progress-linear>
                     </v-col>
@@ -207,13 +207,14 @@
             <h5>Moveset</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
                 <v-row v-for="(move) in orderMovesByLevelLearnedAt(pokemon.moves)" :key="move.move.name">
-                    <v-col xs12 md6>
+                    <v-col xs=12 md=6>
                         <span class="statName text-capitalize">
                             {{ move.move.name }}
                         </span>
                     </v-col>
-                    <v-col xs12 md6>
-                        <v-chip class="short" variant="outlined" align-self="center">
+                    <v-col xs=12 md=6>
+                        <v-chip class="short" :color="colorByLevel(move.version_group_details[0].level_learned_at)"
+                            variant="flat" align-self="center">
                             <span>{{ move.version_group_details[0].level_learned_at }}</span>
                         </v-chip>
                     </v-col>
@@ -269,6 +270,19 @@ export default {
                 return a.version_group_details[0].level_learned_at - b.version_group_details[0].level_learned_at;
             });
         },
+        colorByLevel(level) {
+            let color1 = 'DD0000';
+            let color2 = '00CC00';
+            let ratio = level / 100;
+            let hex = function (x) {
+                x = x.toString(16);
+                return (x.length == 1) ? '0' + x : x;
+            };
+            let r = Math.ceil(parseInt(color1.substring(0, 2), 16) * ratio + parseInt(color2.substring(0, 2), 16) * (1 - ratio));
+            let g = Math.ceil(parseInt(color1.substring(2, 4), 16) * ratio + parseInt(color2.substring(2, 4), 16) * (1 - ratio));
+            let b = Math.ceil(parseInt(color1.substring(4, 6), 16) * ratio + parseInt(color2.substring(4, 6), 16) * (1 - ratio));
+            return `#${hex(r) + hex(g) + hex(b)}`;
+        },
     },
     created() {
         if (isNaN(this.$route.params.id)) {
@@ -307,5 +321,17 @@ h5 {
 
 .statName {
     color: #ACB2C1;
+}
+
+.container {
+    max-width: 500px;
+    min-width: 250px;
+    margin: 0 auto;
+}
+
+.num {
+    --breakpoint: 100;
+    --g: calc((clamp(0, var(--num), var(--breakpoint)) - calc(var(--breakpoint) - 1)) * 255);
+    color: rgb(0, var(--g), 0);
 }
 </style>
