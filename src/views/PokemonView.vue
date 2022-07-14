@@ -340,7 +340,6 @@ export default {
     background-color: rgb(255, 0, 0, 0);
 }
 
-/* all headers should be white */
 h1,
 h2,
 h3,

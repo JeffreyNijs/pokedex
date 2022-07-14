@@ -11,7 +11,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pokemon/:id',
     name: 'pokemon',
     component: () => import('../views/PokemonView.vue'),
-  }
+  },
+  {
+    path: '/team',
+    name: 'team',
+    component: () => import('../views/TeamView.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',
