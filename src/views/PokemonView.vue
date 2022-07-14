@@ -181,7 +181,7 @@
                         </span>
                     </v-col>
                     <v-col xs=12 md=6>
-                        <span class="font-weight-bold">{{ divideAbilitiesByComma(pokemon.abilities) }}</span>
+                        <span class="font-weight-bold text-capitalize">{{ divideAbilitiesByComma(pokemon.abilities) }}</span>
                     </v-col>
                 </v-row>
             </v-card>
