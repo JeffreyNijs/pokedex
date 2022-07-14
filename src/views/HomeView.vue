@@ -1,4 +1,5 @@
 <template>
+  <AppBar />
   <v-container>
     <h1 class="my-3">Pokédex</h1>
     <v-text-field v-model="namePokemon" hide-details prepend-inner-icon="mdi-magnify" single-line variant="solo"
@@ -32,10 +33,12 @@
 
 <script>
 import PokemonList from "@/components/PokemonList.vue";
+import AppBar from "@/components/AppBar.vue";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
     PokemonList,
+    AppBar,
   },
   data() {
     return {

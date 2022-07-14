@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main>
+    <v-main class="pa-0">
       <router-view />
     </v-main>
   </v-app>
@@ -8,21 +8,21 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-
 export default defineComponent({
-  name: 'App',
-
+  name: "App",
   data() {
     return {
       //
-    }
+    };
   },
 })
 </script>
 
 <style>
 @keyframes animate {
-  from {background-color: #fff;}
+  from {
+    background-color: #fff;
+  }
 }
 
 .animated {

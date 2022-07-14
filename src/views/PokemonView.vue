@@ -1,4 +1,5 @@
 <template>
+    <AppBar :theme="'dark'" />
     <v-container fill-height fluid :class="[pokemon.types[0].type.name, 'animated']">
         <div class="container" v-if="pokemon">
             <h1 class="text-capitalize">{{ pokemon.name }}</h1>
@@ -232,6 +233,7 @@
 
 <script>
 import PokemonType from "@/components/PokemonType.vue";
+import AppBar from "@/components/AppBar.vue";
 import zeroPad from "@/utils/ZeroPad";
 import axios from "axios";
 import { mapActions } from "vuex";
@@ -239,6 +241,7 @@ export default {
     name: "PokemonView",
     components: {
         PokemonType,
+        AppBar,
     },
     data() {
         return {
