@@ -181,7 +181,9 @@
                         </span>
                     </v-col>
                     <v-col xs=12 md=6>
-                        <span class="font-weight-bold text-capitalize">{{ divideAbilitiesByComma(pokemon.abilities) }}</span>
+                        <span class="font-weight-bold text-capitalize">{{
+                                divideAbilitiesByComma(pokemon.abilities)
+                        }}</span>
                     </v-col>
                 </v-row>
             </v-card>
@@ -206,17 +208,16 @@
             </v-card>
             <h5>Moveset</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
-                <v-row v-for="(move) in orderMovesByLevelLearnedAt(pokemon.moves)" :key="move.move.name">
-                    <v-col xs=12 md=6>
-                        <span class="statName text-capitalize">
-                            {{ move.move.name }}
-                        </span>
-                    </v-col>
-                    <v-col xs=12 md=6>
-                        <v-chip class="short" :color="colorByLevel(move.version_group_details[0].level_learned_at)"
+                <v-row>
+                    <v-col cols="12" sx="6" sm="6" md="6" v-for="(move) in orderMovesByLevelLearnedAt(pokemon.moves)"
+                        :key="move.move.name">
+                        <v-chip class="short mr-3" :color="colorByLevel(move.version_group_details[0].level_learned_at)"
                             variant="flat" align-self="center">
                             <span>{{ move.version_group_details[0].level_learned_at }}</span>
                         </v-chip>
+                        <span class="font-weight-bold text-capitalize">
+                            {{ move.move.name }}
+                        </span>
                     </v-col>
                 </v-row>
             </v-card>
@@ -327,11 +328,5 @@ h5 {
     max-width: 500px;
     min-width: 250px;
     margin: 0 auto;
-}
-
-.num {
-    --breakpoint: 100;
-    --g: calc((clamp(0, var(--num), var(--breakpoint)) - calc(var(--breakpoint) - 1)) * 255);
-    color: rgb(0, var(--g), 0);
 }
 </style>
