@@ -17,6 +17,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'team',
     component: () => import('../views/TeamView.vue'),
   },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () => import('../views/FavoritesView.vue'),
+  },
   // {
   //   path: '/about',
   //   name: 'about',
