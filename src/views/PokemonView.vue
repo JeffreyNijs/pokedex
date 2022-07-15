@@ -227,7 +227,7 @@
                             variant="flat" align-self="center">
                             <span>{{ move.version_group_details[0].level_learned_at }}</span>
                         </v-chip>
-                        <span class="font-weight-bold text-capitalize">
+                        <span class="d-inline-block font-weight-bold text-capitalize">
                             {{ move.move.name }}
                         </span>
                     </v-col>
