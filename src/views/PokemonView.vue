@@ -118,9 +118,9 @@
                         {{ isInFavorites ? 'mdi-heart' : 'mdi-heart-outline' }}
                     </v-icon>
                 </v-btn>
-                <v-btn color="transparent" elevation="0" icon
+                <v-btn color="transparent" elevation="0" icon :disabled="$store.state.team.length >= 6"
                     @click="isInTeam ? removeFromTeam() : $store.state.team.length >= 6 ? undefined : addToTeam()">
-                    <v-icon color="white">
+                    <v-icon :color="$store.state.team.length >= 6 ? '#AAAAAA' : 'white'">
                         {{ isInTeam ? 'mdi-account-multiple' : $store.state.team.length >= 6 ? 'mdi-account-off-outline'
                                 : 'mdi-account-multiple-plus-outline'
                         }}
