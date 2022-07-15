@@ -1,9 +1,10 @@
 <template>
     <AppBar :theme="'dark'" />
-    <v-container style="height: 100vh;" :style="{ background: 'linear-gradient(109.73deg , #46469C 0%, #7E32E0 100%)' }"
-        fill-height fluid class='animated'>
-        <h1 class="text-capitalize">Mijn team</h1>
-        <PokemonList :poke="filterPokemonByIdsInTeam" />
+    <v-container fluid class="bg animated fill-height">
+        <v-container>
+            <h1>Mijn team</h1>
+            <PokemonList :poke="filterPokemonByIdsInTeam" />
+        </v-container>
     </v-container>
 </template>
 
@@ -34,13 +35,11 @@ export default {
 </script>
 
 <style scoped>
-h1,
-h2,
-h3,
-h4,
-h5 {
+h1 {
     color: white;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+}
+
+.bg {
+    background: linear-gradient(109.73deg, #46469C 0%, #7E32E0 100%);
 }
 </style>

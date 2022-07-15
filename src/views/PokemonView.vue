@@ -1,6 +1,6 @@
 <template>
     <AppBar :theme="'dark'" />
-    <v-container fill-height fluid :class="[pokemon.types[0].type.name, 'animated']">
+    <v-container fluid :class="[pokemon.types[0].type.name, 'animated', 'fill-height']">
         <div class="container" v-if="pokemon">
             <h1 class="text-capitalize">{{ pokemon.name }}</h1>
             <v-carousel hide-delimiters :continuous="false" :show-arrows="true" hide-delimiter-background

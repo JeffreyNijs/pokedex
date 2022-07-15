@@ -12,8 +12,6 @@
       </template>
     </v-text-field>
     <v-expand-transition>
-      <!-- {{ types }}
-          {{ availableTypesAndCount }} -->
       <v-row v-show="showFilters" no-gutters>
         <v-col cols="12" md="2" sm="4" v-for="(value, propertyName) in availableTypesAndCount" :key="propertyName">
           <v-checkbox hide-details class="ma-0 pa-0 text-capitalize" v-model="types"
