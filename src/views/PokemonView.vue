@@ -233,6 +233,11 @@
                     </v-col>
                 </v-row>
             </v-card>
+            <h5 :v-if="evolution">Evolution</h5>
+            <v-container :class="pokemon.id !== poke.id ? 'transparent' : undefined" class="my-5 ma-0 pa-0"
+                v-for="poke in evolution" :key="poke.id">
+                <CardPokemon :poke="poke" />
+            </v-container>
         </div>
         <div fill-height fluid v-else>
             <v-row align-center justify-center>
@@ -246,6 +251,7 @@
 import PokemonType from "@/components/PokemonType.vue";
 import AppBar from "@/components/AppBar.vue";
 import zeroPad from "@/utils/ZeroPad";
+import CardPokemon from "@/components/CardPokemon.vue";
 import axios from "axios";
 import { mapActions } from "vuex";
 export default {
@@ -253,12 +259,13 @@ export default {
     components: {
         PokemonType,
         AppBar,
+        CardPokemon,
     },
     data() {
         return {
             pokemon: {},
             species: {},
-            evolution: {},
+            evolution: [],
             type: "",
             number: "",
         };
@@ -274,16 +281,35 @@ export default {
             }).catch((error) => { console.log(error); });
         },
         async fetchPokemonSpecies() {
-            this.species = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${this.pokemon.id}`).then((response) => {
+            await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${this.pokemon.id}`).then((response) => {
                 this.species = response.data;
-                console.log(response.data)
                 this.fetchPokemonEvolutionChain();
             }).catch((error) => { console.log(error); });
         },
         async fetchPokemonEvolutionChain() {
-            this.evolution = await axios.get(`https://pokeapi.co/api/v2/evolution-chain/${this.pokemon.id}`).then((response) => {
-                this.evolution = response.data;
+            let evolutions = await axios.get(this.species.evolution_chain.url).then((response) => {
+                let evolutions = [];
+                let evolutionChain = response.data.chain;
+                while (evolutionChain.evolves_to.length > 0) {
+                    evolutions.push(evolutionChain);
+                    evolutionChain = evolutionChain.evolves_to[0];
+                }
+                evolutions.push(evolutionChain);
+                return evolutions;
             }).catch((error) => { console.log(error); });
+
+            let evolutionArray = [];
+            for (let evo of evolutions) {
+                let evolution = await axios.get(evo.species.url).then((response) => {
+                    return response.data;
+                }).catch((error) => { console.log(error); });
+                evolutionArray.push(await axios.get(
+                    `https://pokeapi.co/api/v2/pokemon/${evolution.id}`
+                ).then((response) => {
+                    return this.$store.state.pokemon.filter(pokemon => pokemon.id === response.data.id)[0];
+                }).catch((error) => { console.log(error); }));
+            }
+            this.evolution = evolutionArray;
         },
         zeroPad() {
             return zeroPad(this.pokemon.id, 3);
@@ -341,6 +367,12 @@ export default {
             }
             return undefined;
         },
+        pokemonEvolutions() {
+            if (this.evolution) {
+                return this.evolution;
+            }
+            return undefined;
+        },
     },
     created() {
         if (isNaN(this.$route.params.id)) {
@@ -384,5 +416,9 @@ h5 {
     max-width: 500px;
     min-width: 250px;
     margin: 0 auto;
+}
+
+.transparent {
+    opacity: 0.4;
 }
 </style>
