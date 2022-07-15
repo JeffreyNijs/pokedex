@@ -1,6 +1,6 @@
 <template>
     <AppBar :theme="'dark'" />
-    <v-container fill-height fluid :class="[pokemon.types[0].type.name, 'animated']">
+    <v-container fluid :class="[pokemon.types[0].type.name, 'animated', 'fill-height']">
         <div class="container" v-if="pokemon">
             <h1 class="text-capitalize">{{ pokemon.name }}</h1>
             <v-carousel hide-delimiters :continuous="false" :show-arrows="true" hide-delimiter-background
@@ -111,6 +111,19 @@
                     </v-sheet>
                 </v-carousel-item>
             </v-carousel>
+            <v-row class="pa-3 justify-end">
+                <v-btn color="transparent" elevation="0" icon
+                    @click="isInFavorites ? removeFromFavorites() : addToFavorites()">
+                    <v-icon :color="isInFavorites ? 'red' : 'white'">
+                        {{ isInFavorites ? 'mdi-heart' : 'mdi-heart-outline' }}
+                    </v-icon>
+                </v-btn>
+                <v-btn color="transparent" elevation="0" icon @click="isInTeam ? removeFromTeam() : addToTeam()">
+                    <v-icon color="white">
+                        {{ isInTeam ? 'mdi-account-multiple' : 'mdi-account-multiple-plus-outline' }}
+                    </v-icon>
+                </v-btn>
+            </v-row>
             <h5>INFO</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
                 <v-row>
@@ -251,8 +264,8 @@ export default {
         };
     },
     methods: {
-        ...mapActions(["getPokemon"]),
-        async getPokemonDetails() {
+        ...mapActions(["fetchPokemon", "addToTeam", "removeFromTeam", "addToFavorites", "removeFromFavorites"]),
+        async fetchPokemonDetails() {
             let id = this.$route.params.id;
             try {
                 let details = await axios.get(
@@ -287,13 +300,33 @@ export default {
             let b = Math.ceil(parseInt(color1.substring(4, 6), 16) * ratio + parseInt(color2.substring(4, 6), 16) * (1 - ratio));
             return `#${hex(r) + hex(g) + hex(b)}`;
         },
+        addToTeam() {
+            this.$store.dispatch("addToTeam", this.pokemon.id);
+        },
+        removeFromTeam() {
+            this.$store.dispatch("removeFromTeam", this.pokemon.id);
+        },
+        addToFavorites() {
+            this.$store.commit("ADD_TO_FAVORITES", this.pokemon.id);
+        },
+        removeFromFavorites() {
+            this.$store.commit("REMOVE_FROM_FAVORITES", this.pokemon.id);
+        },
+    },
+    computed: {
+        isInTeam() {
+            return this.$store.state.team.includes(this.pokemon.id);
+        },
+        isInFavorites() {
+            return this.$store.state.favorites.includes(this.pokemon.id);
+        },
     },
     created() {
         if (isNaN(this.$route.params.id)) {
-            this.getPokemon();
+            this.fetchPokemon();
             this.pokemon = this.$store.state.pokemon.find((pokemon) => pokemon.id == this.$route.params.id);
         }
-        this.getPokemonDetails();
+        this.fetchPokemonDetails();
     },
 };
 </script>
@@ -307,7 +340,6 @@ export default {
     background-color: rgb(255, 0, 0, 0);
 }
 
-/* all headers should be white */
 h1,
 h2,
 h3,

@@ -11,15 +11,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pokemon/:id',
     name: 'pokemon',
     component: () => import('../views/PokemonView.vue'),
-  }
-  // {
-  //   path: '/about',
-  //   name: 'about',
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  // }
+  },
+  {
+    path: '/team',
+    name: 'team',
+    component: () => import('../views/TeamView.vue'),
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () => import('../views/FavoritesView.vue'),
+  },
 ]
 
 const router = createRouter({
