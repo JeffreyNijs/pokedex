@@ -233,7 +233,7 @@
                     </v-col>
                 </v-row>
             </v-card>
-            <h5 :v-if="evolution">Evolution</h5>
+            <h5 v-if="this.evolution.length">Evolution</h5>
             <v-container :class="pokemon.id !== poke.id ? 'transparent' : undefined" class="my-5 ma-0 pa-0"
                 v-for="poke in evolution" :key="poke.id">
                 <CardPokemon :poke="poke" />
@@ -309,7 +309,7 @@ export default {
                     return this.$store.state.pokemon.filter(pokemon => pokemon.id === response.data.id)[0];
                 }).catch((error) => { console.log(error); }));
             }
-            this.evolution = evolutionArray;
+            this.evolution = evolutionArray.filter(pokemon => this.$store.state.pokemon.filter(p => p.id === pokemon.id).length > 0);
         },
         zeroPad() {
             return zeroPad(this.pokemon.id, 3);
