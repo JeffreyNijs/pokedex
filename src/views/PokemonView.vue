@@ -118,14 +118,22 @@
                         {{ isInFavorites ? 'mdi-heart' : 'mdi-heart-outline' }}
                     </v-icon>
                 </v-btn>
-                <v-btn color="transparent" elevation="0" icon @click="isInTeam ? removeFromTeam() : $store.state.team.length >= 6 ? undefined : addToTeam()">
+                <v-btn color="transparent" elevation="0" icon
+                    @click="isInTeam ? removeFromTeam() : $store.state.team.length >= 6 ? undefined : addToTeam()">
                     <v-icon color="white">
-                        {{ isInTeam ? 'mdi-account-multiple' : $store.state.team.length >= 6 ? 'mdi-account-off-outline' : 'mdi-account-multiple-plus-outline' }}
+                        {{ isInTeam ? 'mdi-account-multiple' : $store.state.team.length >= 6 ? 'mdi-account-off-outline'
+                                : 'mdi-account-multiple-plus-outline'
+                        }}
                     </v-icon>
                 </v-btn>
             </v-row>
             <h5>INFO</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
+                <v-row :v-if="pokemonFlavorText">
+                    <v-col>
+                        <p class="font-weight-medium">{{ pokemonFlavorText }}</p>
+                    </v-col>
+                </v-row>
                 <v-row>
                     <v-col xs=12 md=6>
                         <span class="statName">
@@ -168,26 +176,16 @@
                         <span class="font-weight-bold">{{ pokemon.weight / 10 }} kg</span>
                     </v-col>
                 </v-row>
-                <!-- <v-row>
+                <v-row :v-if="pokemonGenus">
                     <v-col xs=12 md=6>
                         <span class="statName">
                             Categorie
                         </span>
                     </v-col>
                     <v-col xs=12 md=6>
-                        <span class="font-weight-bold">{{ pokemon.category }} NOT IN API</span>
+                        <span class="font-weight-bold">{{ pokemonGenus }}</span>
                     </v-col>
                 </v-row>
-                <v-row>
-                    <v-col xs=12 md=6>
-                        <span class="statName">
-                            Geslacht
-                        </span>
-                    </v-col>
-                    <v-col xs=12 md=6>
-                        <span class="font-weight-bold">{{ pokemon.gender }} NOT IN API</span>
-                    </v-col>
-                </v-row> -->
                 <v-row>
                     <v-col xs=12 md=6>
                         <span class="statName">
@@ -259,6 +257,8 @@ export default {
     data() {
         return {
             pokemon: {},
+            species: {},
+            evolution: {},
             type: "",
             number: "",
         };
@@ -266,15 +266,24 @@ export default {
     methods: {
         ...mapActions(["fetchPokemon", "addToTeam", "removeFromTeam", "addToFavorites", "removeFromFavorites"]),
         async fetchPokemonDetails() {
-            let id = this.$route.params.id;
-            try {
-                let details = await axios.get(
-                    `https://pokeapi.co/api/v2/pokemon/${id}`
-                );
-                this.pokemon = details.data;
-            } catch (error) {
-                console.log(error);
-            }
+            await axios.get(
+                `https://pokeapi.co/api/v2/pokemon/${this.$route.params.id}`
+            ).then((response) => {
+                this.pokemon = response.data;
+                this.fetchPokemonSpecies();
+            }).catch((error) => { console.log(error); });
+        },
+        async fetchPokemonSpecies() {
+            this.species = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${this.pokemon.id}`).then((response) => {
+                this.species = response.data;
+                console.log(response.data)
+                this.fetchPokemonEvolutionChain();
+            }).catch((error) => { console.log(error); });
+        },
+        async fetchPokemonEvolutionChain() {
+            this.evolution = await axios.get(`https://pokeapi.co/api/v2/evolution-chain/${this.pokemon.id}`).then((response) => {
+                this.evolution = response.data;
+            }).catch((error) => { console.log(error); });
         },
         zeroPad() {
             return zeroPad(this.pokemon.id, 3);
@@ -319,6 +328,18 @@ export default {
         },
         isInFavorites() {
             return this.$store.state.favorites.includes(this.pokemon.id);
+        },
+        pokemonGenus() {
+            if (this.species.genera) {
+                return this.species.genera.find((genus) => genus.language.name === "en").genus;
+            }
+            return undefined;
+        },
+        pokemonFlavorText() {
+            if (this.species.flavor_text_entries) {
+                return this.species.flavor_text_entries.find((flavorText) => flavorText.language.name === "en").flavor_text.replace(/\f/g, ' ');
+            }
+            return undefined;
         },
     },
     created() {
