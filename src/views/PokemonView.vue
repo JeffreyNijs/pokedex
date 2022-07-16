@@ -20,9 +20,10 @@
                         {{ isInFavorites ? 'mdi-heart' : 'mdi-heart-outline' }}
                     </v-icon>
                 </v-btn>
-                <v-btn color="transparent" elevation="0" icon :disabled="$store.state.team.length >= 6"
+                <v-btn color="transparent" elevation="0" icon :disabled="!isInTeam && $store.state.team.length >= 6"
                     @click="isInTeam ? removeFromTeam() : $store.state.team.length >= 6 ? undefined : addToTeam()">
-                    <v-icon :color="$store.state.team.length >= 6 ? '#AAAAAA' : 'white'">
+                    <v-icon
+                        :color="!isInTeam && !$store.state.team.length >= 6 || $store.state.team.length >= 6 && !isInTeam ? '#AAAAAA' : 'white'">
                         {{ isInTeam ? 'mdi-account-multiple' : $store.state.team.length >= 6 ? 'mdi-account-off-outline'
                                 : 'mdi-account-multiple-plus-outline'
                         }}
@@ -218,7 +219,8 @@ export default {
                     return this.$store.state.pokemon.filter(pokemon => pokemon.id === response.data.id)[0];
                 }).catch((error) => { console.log(error); }));
             }
-            this.evolution = evolutionArray.filter(pokemon => this.$store.state.pokemon.filter(p => p.id === pokemon.id).length > 0);
+            let evolutionList = evolutionArray.filter(pokemon => this.$store.state.pokemon.filter(p => p.id === pokemon.id).length > 0)
+            this.evolution = evolutionList.length > 1 ? evolutionList : [];
         },
         zeroPad() {
             return zeroPad(this.pokemon.id, 3);
@@ -280,7 +282,7 @@ export default {
             return undefined;
         },
         pokemonEvolutions() {
-            if (this.evolution) {
+            if (this.evolution > 1) {
                 return this.evolution;
             }
             return undefined;
