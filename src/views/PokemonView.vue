@@ -219,7 +219,8 @@ export default {
                     return this.$store.state.pokemon.filter(pokemon => pokemon.id === response.data.id)[0];
                 }).catch((error) => { console.log(error); }));
             }
-            this.evolution = evolutionArray.filter(pokemon => this.$store.state.pokemon.filter(p => p.id === pokemon.id).length > 0);
+            let evolutionList = evolutionArray.filter(pokemon => this.$store.state.pokemon.filter(p => p.id === pokemon.id).length > 0)
+            this.evolution = evolutionList.length > 1 ? evolutionList : [];
         },
         zeroPad() {
             return zeroPad(this.pokemon.id, 3);
@@ -281,7 +282,7 @@ export default {
             return undefined;
         },
         pokemonEvolutions() {
-            if (this.evolution) {
+            if (this.evolution > 1) {
                 return this.evolution;
             }
             return undefined;
