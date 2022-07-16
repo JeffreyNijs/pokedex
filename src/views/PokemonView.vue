@@ -289,7 +289,6 @@ export default {
         },
         carouselImages() {
             if (this.pokemon.sprites) {
-                // map sprites to array of images if not null
                 return [
                     this.pokemon.sprites.other['official-artwork'].front_default,
                     this.pokemon.sprites.other.home.front_default,
