@@ -141,7 +141,7 @@
                 v-for="poke in evolution" :key="poke.id">
                 <CardPokemon :poke="poke" />
             </v-container>
-            <v-overlay :absolute="absolute" :model-value="lightbox.length > 0" @click="lightbox = ''" width="100vw"
+            <v-overlay :model-value="lightbox.length > 0" @click="lightbox = ''" width="100vw"
                 class="align-center justify-center">
                 <v-container>
                     <v-img :src="lightbox" :key="lightbox.length" :cover="contain" class="img" />
