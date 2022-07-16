@@ -116,8 +116,7 @@
                         </span>
                     </v-col>
                     <v-col cols=6 xs=6 sm=6 md=6>
-                        <v-progress-linear :model-value="stat.base_stat" background-color="error" color="success">
-                        </v-progress-linear>
+                        <v-progress-linear class="d-inline-block" :model-value="stat.base_stat" background-color="error" color="success" />
                     </v-col>
                 </v-row>
             </v-card>
