@@ -5,108 +5,10 @@
             <h1 class="text-capitalize">{{ pokemon.name }}</h1>
             <v-carousel hide-delimiters :continuous="false" :show-arrows="true" hide-delimiter-background
                 delimiter-icon="mdi-minus" height="300">
-                <v-carousel-item v-if="pokemon.sprites.other['official-artwork'].front_default">
+                <v-carousel-item v-for="image in carouselImages" :key="image">
                     <v-sheet height="100%" tile>
                         <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.other['official-artwork'].front_default" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.other.home.front_default">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.other.home.front_default" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.other.home.front_shiny">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.other.home.front_shiny" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.other.home.front_female">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.other.home.front_female" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.other.home.front_shiny_female">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.other.home.front_shiny_female" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.other.dream_world.front_default">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.other.dream_world.front_default" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.other.dream_world.front_female">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.other.dream_world.front_female" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.front_default">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.front_default" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.back_default">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.back_default" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.front_female">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.front_female" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.back_female">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.back_female" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.front_shiny">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.front_shiny" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.back_shiny">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.back_shiny" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.front_shiny_female">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.front_shiny_female" />
-                        </v-row>
-                    </v-sheet>
-                </v-carousel-item>
-                <v-carousel-item v-if="pokemon.sprites.back_shiny_female">
-                    <v-sheet height="100%" tile>
-                        <v-row class="fill-height" align="center" justify="center">
-                            <v-img :src="pokemon.sprites.back_shiny_female" />
+                            <v-img :src="image" v-on:click="openLightbox(image)" />
                         </v-row>
                     </v-sheet>
                 </v-carousel-item>
@@ -238,6 +140,12 @@
                 v-for="poke in evolution" :key="poke.id">
                 <CardPokemon :poke="poke" />
             </v-container>
+            <v-overlay :absolute="absolute" :model-value="lightbox.length > 0" @click="lightbox = ''" width="100vw"
+                class="align-center justify-center">
+                <v-container>
+                    <v-img :src="lightbox" :key="lightbox.length" :cover="contain" class="img" />
+                </v-container>
+            </v-overlay>
         </div>
         <div fill-height fluid v-else>
             <v-row align-center justify-center>
@@ -268,6 +176,7 @@ export default {
             evolution: [],
             type: "",
             number: "",
+            lightbox: '',
         };
     },
     methods: {
@@ -347,6 +256,9 @@ export default {
         removeFromFavorites() {
             this.$store.commit("REMOVE_FROM_FAVORITES", this.pokemon.id);
         },
+        openLightbox(image) {
+            this.lightbox = image;
+        },
     },
     computed: {
         isInTeam() {
@@ -372,6 +284,29 @@ export default {
                 return this.evolution;
             }
             return undefined;
+        },
+        carouselImages() {
+            if (this.pokemon.sprites) {
+                // map sprites to array of images if not null
+                return [
+                    this.pokemon.sprites.other['official-artwork'].front_default,
+                    this.pokemon.sprites.other.home.front_default,
+                    this.pokemon.sprites.other.home.front_shiny,
+                    this.pokemon.sprites.other.home.front_female,
+                    this.pokemon.sprites.other.home.front_shiny_female,
+                    this.pokemon.sprites.other.dream_world.front_default,
+                    this.pokemon.sprites.other.dream_world.front_female,
+                    this.pokemon.sprites.front_default,
+                    this.pokemon.sprites.back_default,
+                    this.pokemon.sprites.front_female,
+                    this.pokemon.sprites.back_female,
+                    this.pokemon.sprites.front_shiny,
+                    this.pokemon.sprites.back_shiny,
+                    this.pokemon.sprites.front_shiny_female,
+                    this.pokemon.sprites.back_shiny_female,
+                ].filter((sprite) => sprite);
+            }
+            return [];
         },
     },
     created() {
@@ -420,5 +355,9 @@ h5 {
 
 .transparent {
     opacity: 0.4;
+}
+
+.img {
+    height: 100vh;
 }
 </style>
