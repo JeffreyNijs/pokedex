@@ -103,7 +103,7 @@
                 </v-row>
             </v-card>
             <h5>Statistieken</h5>
-            <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
+            <v-card v-if="statDetails" class="pa-3 mb-10 mt-2" rounded elevation="5" @click="statDetails = false">
                 <v-row v-for="(stat) in pokemon.stats" :key="stat.stat.name">
                     <v-col cols="4" xs="4" sm="4" md="4">
                         <span class="statName text-capitalize">
@@ -120,6 +120,9 @@
                         </v-progress-linear>
                     </v-col>
                 </v-row>
+            </v-card>
+            <v-card v-else class="pa-3 mb-10 mt-2" rounded elevation="5" @click="statDetails = true">
+                <RadarChart :chart-data="this.radarChartData" />
             </v-card>
             <h5>Moveset</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
@@ -163,12 +166,14 @@ import zeroPad from "@/utils/ZeroPad";
 import CardPokemon from "@/components/CardPokemon.vue";
 import axios from "axios";
 import { mapActions } from "vuex";
+import RadarChart from "@/components/RadarChart.vue";
 export default {
     name: "PokemonView",
     components: {
         PokemonType,
         AppBar,
         CardPokemon,
+        RadarChart,
     },
     data() {
         return {
@@ -178,6 +183,7 @@ export default {
             type: "",
             number: "",
             lightbox: '',
+            statDetails: true,
         };
     },
     methods: {
@@ -308,6 +314,22 @@ export default {
                 ].filter((sprite) => sprite);
             }
             return [];
+        },
+        radarChartData() {
+            return {
+                labels: this.pokemon.stats.map((stat) => stat.stat.name.replace(/(^|[\s-])\S/g, (match) => { return match.toUpperCase(); })),
+                datasets: [
+                    {
+                        label: "Base Stats",
+                        backgroundColor: "rgba(255,99,132,0.2)",
+                        borderColor: "rgba(255,99,132,1)",
+                        borderWidth: 2,
+                        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                        hoverBorderColor: "rgba(255,99,132,1)",
+                        data: this.pokemon.stats.map((stat) => stat.base_stat),
+                    }
+                ]
+            }
         },
     },
     created() {
