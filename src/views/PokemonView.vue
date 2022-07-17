@@ -1,6 +1,6 @@
 <template>
     <AppBar :theme="'dark'" />
-    <v-container fluid :class="[pokemon.types[0].type.name, 'animated', 'fill-height']">
+    <v-container v-if="pokemon" fluid :class="[pokemon.types[0].type.name, 'animated', 'fill-height']">
         <div class="container" v-if="pokemon">
             <h1 class="text-capitalize">{{ pokemon.name }}</h1>
             <v-carousel hide-delimiters :continuous="false" :show-arrows="true" hide-delimiter-background
@@ -103,7 +103,7 @@
                 </v-row>
             </v-card>
             <h5>Statistieken</h5>
-            <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
+            <v-card v-if="statDetails" class="pa-3 mb-10 mt-2" rounded elevation="5" @click="statDetails = false">
                 <v-row v-for="(stat) in pokemon.stats" :key="stat.stat.name">
                     <v-col cols="4" xs="4" sm="4" md="4">
                         <span class="statName text-capitalize">
@@ -116,10 +116,12 @@
                         </span>
                     </v-col>
                     <v-col cols=6 xs=6 sm=6 md=6>
-                        <v-progress-linear :model-value="stat.base_stat" background-color="error" color="success">
-                        </v-progress-linear>
+                        <v-progress-linear class="d-inline-block" :model-value="stat.base_stat" background-color="error" color="success" />
                     </v-col>
                 </v-row>
+            </v-card>
+            <v-card v-else class="pa-3 mb-10 mt-2" rounded elevation="5" @click="statDetails = true">
+                <RadarChart :chart-data="this.radarChartData" />
             </v-card>
             <h5>Moveset</h5>
             <v-card class="pa-3 mb-10 mt-2" rounded elevation="5">
@@ -141,7 +143,7 @@
                 v-for="poke in evolution" :key="poke.id">
                 <CardPokemon :poke="poke" />
             </v-container>
-            <v-overlay :absolute="absolute" :model-value="lightbox.length > 0" @click="lightbox = ''" width="100vw"
+            <v-overlay :model-value="lightbox.length > 0" @click="lightbox = ''" width="100vw"
                 class="align-center justify-center">
                 <v-container>
                     <v-img :src="lightbox" :key="lightbox.length" :cover="contain" class="img" />
@@ -154,6 +156,7 @@
             </v-row>
         </div>
     </v-container>
+    <LoaderScreen v-else />
 </template>
 
 <script>
@@ -163,12 +166,16 @@ import zeroPad from "@/utils/ZeroPad";
 import CardPokemon from "@/components/CardPokemon.vue";
 import axios from "axios";
 import { mapActions } from "vuex";
+import RadarChart from "@/components/RadarChart.vue";
+import LoaderScreen from "@/components/LoaderScreen.vue";
 export default {
     name: "PokemonView",
     components: {
         PokemonType,
         AppBar,
         CardPokemon,
+        RadarChart,
+        LoaderScreen,
     },
     data() {
         return {
@@ -178,6 +185,7 @@ export default {
             type: "",
             number: "",
             lightbox: '',
+            statDetails: true,
         };
     },
     methods: {
@@ -289,7 +297,6 @@ export default {
         },
         carouselImages() {
             if (this.pokemon.sprites) {
-                // map sprites to array of images if not null
                 return [
                     this.pokemon.sprites.other['official-artwork'].front_default,
                     this.pokemon.sprites.other.home.front_default,
@@ -309,6 +316,22 @@ export default {
                 ].filter((sprite) => sprite);
             }
             return [];
+        },
+        radarChartData() {
+            return {
+                labels: this.pokemon.stats.map((stat) => stat.stat.name.replace(/(^|[\s-])\S/g, (match) => { return match.toUpperCase(); })),
+                datasets: [
+                    {
+                        label: "Base Stats",
+                        backgroundColor: "rgba(255,99,132,0.2)",
+                        borderColor: "rgba(255,99,132,1)",
+                        borderWidth: 2,
+                        hoverBackgroundColor: "rgba(255,99,132,0.4)",
+                        hoverBorderColor: "rgba(255,99,132,1)",
+                        data: this.pokemon.stats.map((stat) => stat.base_stat),
+                    }
+                ]
+            }
         },
     },
     created() {

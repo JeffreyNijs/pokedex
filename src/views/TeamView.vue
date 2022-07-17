@@ -1,21 +1,24 @@
 <template>
     <AppBar :theme="'dark'" />
-    <v-container fluid class="bg animated fill-height">
+    <v-container v-if="team" fluid class="bg animated fill-height">
         <v-container>
             <h1>Mijn team</h1>
             <PokemonList :poke="filterPokemonByIdsInTeam" />
         </v-container>
     </v-container>
+    <LoaderScreen v-else />
 </template>
 
 <script>
 import PokemonList from "@/components/PokemonList.vue";
 import AppBar from "@/components/AppBar.vue";
 import { mapState, mapActions } from "vuex";
+import LoaderScreen from "@/components/LoaderScreen.vue";
 export default {
     components: {
         PokemonList,
         AppBar,
+        LoaderScreen,
     },
     methods: {
         ...mapActions(["fetchPokemon"]),

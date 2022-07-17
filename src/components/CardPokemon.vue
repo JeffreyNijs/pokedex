@@ -1,6 +1,6 @@
 <template>
   <v-card :href="`/pokemon/${pokemon.id}`" elevation="4" class="pa-3" min-width="270">
-    <v-row no-gutters>
+    <v-row no-gutters justify="center" align="center">
       <v-col cols=11>
         <v-row no-gutters>
           <v-col cols=3 xs=3 sm=2 align-self="center">

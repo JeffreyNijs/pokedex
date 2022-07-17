@@ -1,6 +1,6 @@
 <template>
     <v-app-bar :color="windowTop ? '#FB1B1B' : '#00000000'" :elevation="windowTop ? undefined : 0"
-        :theme="windowTop ? 'dark' : theme ?? 'light'" :collapse="windowTop" :class="windowTop ? undefined : 'v-toolbar-events'">
+        :theme="windowTop ? 'dark' : theme ?? 'light'" :collapse="windowTop > 0" :class="windowTop ? undefined : 'v-toolbar-events'">
 
         <v-spacer></v-spacer>
 
