@@ -15,6 +15,11 @@ export default defineComponent({
       //
     };
   },
+  watch: {
+    $route(to, from) {
+        document.title = to.meta.title || 'Loading...';
+    },
+}
 })
 </script>
 
