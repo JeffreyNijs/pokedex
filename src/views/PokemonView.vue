@@ -116,7 +116,8 @@
                         </span>
                     </v-col>
                     <v-col cols=6 xs=6 sm=6 md=6>
-                        <v-progress-linear class="d-inline-block" :model-value="stat.base_stat" background-color="error" color="success" />
+                        <v-progress-linear class="d-inline-block" :model-value="stat.base_stat" background-color="error"
+                            color="success" />
                     </v-col>
                 </v-row>
             </v-card>
@@ -196,7 +197,10 @@ export default {
             ).then((response) => {
                 this.pokemon = response.data;
                 this.fetchPokemonSpecies();
-            }).catch((error) => { console.log(error); });
+            }).catch((error) => {
+                console.log(error);
+                this.$router.push({ name: '404' });
+            });
         },
         async fetchPokemonSpecies() {
             await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${this.pokemon.id}`).then((response) => {
@@ -337,7 +341,6 @@ export default {
     created() {
         if (isNaN(this.$route.params.id)) {
             this.fetchPokemon();
-            this.pokemon = this.$store.state.pokemon.find((pokemon) => pokemon.id == this.$route.params.id);
         }
         this.fetchPokemonDetails();
     },
