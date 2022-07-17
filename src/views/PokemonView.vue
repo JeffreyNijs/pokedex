@@ -1,6 +1,6 @@
 <template>
     <AppBar :theme="'dark'" />
-    <v-container fluid :class="[pokemon.types[0].type.name, 'animated', 'fill-height']">
+    <v-container v-if="pokemon" fluid :class="[pokemon.types[0].type.name, 'animated', 'fill-height']">
         <div class="container" v-if="pokemon">
             <h1 class="text-capitalize">{{ pokemon.name }}</h1>
             <v-carousel hide-delimiters :continuous="false" :show-arrows="true" hide-delimiter-background
@@ -156,6 +156,7 @@
             </v-row>
         </div>
     </v-container>
+    <LoaderScreen v-else />
 </template>
 
 <script>
@@ -166,6 +167,7 @@ import CardPokemon from "@/components/CardPokemon.vue";
 import axios from "axios";
 import { mapActions } from "vuex";
 import RadarChart from "@/components/RadarChart.vue";
+import LoaderScreen from "@/components/LoaderScreen.vue";
 export default {
     name: "PokemonView",
     components: {
@@ -173,6 +175,7 @@ export default {
         AppBar,
         CardPokemon,
         RadarChart,
+        LoaderScreen,
     },
     data() {
         return {

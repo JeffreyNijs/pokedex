@@ -1,6 +1,6 @@
 <template>
   <AppBar />
-  <v-container>
+  <v-container v-if="pokemon">
     <h1 class="my-3">Pokédex</h1>
     <v-text-field v-model="namePokemon" hide-details prepend-inner-icon="mdi-magnify" single-line variant="solo"
       clearable clear-icon="mdi-delete" density="compact" label="Pokémon zoeken" @click:prepend="toggleIdSearch"
@@ -23,16 +23,19 @@
     <PokemonList :poke="idSearch ? filterPokemonById : sortFilteredPokemon"
       :header="`${idSearch ? filterPokemonById.length : sortFilteredPokemon.length} ${(idSearch ? filterPokemonById.length : sortFilteredPokemon.length) === 1 ? 'resultaat' : 'resultaten'}`" />
   </v-container>
+  <LoaderScreen v-else />
 </template>
 
 <script>
 import PokemonList from "@/components/PokemonList.vue";
 import AppBar from "@/components/AppBar.vue";
+import LoaderScreen from "@/components/LoaderScreen.vue";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
     PokemonList,
     AppBar,
+    LoaderScreen,
   },
   data() {
     return {
