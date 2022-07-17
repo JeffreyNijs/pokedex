@@ -196,6 +196,7 @@ export default {
                 `https://pokeapi.co/api/v2/pokemon/${this.$route.params.id}`
             ).then((response) => {
                 this.pokemon = response.data;
+                document.title = `Pokédex - ` + this.pokemon.name.replace(/(^|[\s-])\S/g, (match) => { return match.toUpperCase(); });
                 this.fetchPokemonSpecies();
             }).catch((error) => {
                 console.log(error);
