@@ -22,6 +22,15 @@ const routes: Array<RouteRecordRaw> = [
     name: 'favorites',
     component: () => import('../views/FavoritesView.vue'),
   },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import('../views/NotFoundView.vue'),
+  },
+  {
+    path: '/:catchAll(.*)',
+    redirect: '/404',
+  },
 ]
 
 const router = createRouter({
