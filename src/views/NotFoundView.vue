@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import AppBar from "@/components/AppBar.vue";
+</script>
+
 <template>
     <AppBar />
     <v-container fluid pa-0>
@@ -9,13 +13,3 @@
         </v-row>
     </v-container>
 </template>
-
-<script>
-import AppBar from "@/components/AppBar.vue";
-export default {
-    name: "NotFoundView",
-    components: {
-        AppBar,
-    },
-};
-</script>

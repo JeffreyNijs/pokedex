@@ -1,6 +1,27 @@
+<script setup lang="ts">
+import { useWindowScroll } from "@vueuse/core";
+import { defineProps, ref } from "vue";
+defineProps({
+    theme: {
+        type: String,
+        required: false,
+    },
+});
+
+const windowTop = ref(useWindowScroll().y);
+
+const scrollToTop = () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+};
+</script>
+
 <template>
     <v-app-bar :color="windowTop ? '#FB1B1B' : '#00000000'" :elevation="windowTop ? undefined : 0"
-        :theme="windowTop ? 'dark' : theme ?? 'light'" :collapse="windowTop > 0" :class="windowTop ? undefined : 'v-toolbar-events'">
+        :theme="windowTop ? 'dark' : theme ?? 'light'" :collapse="windowTop > 0"
+        :class="windowTop ? undefined : 'v-toolbar-events'">
 
         <v-spacer></v-spacer>
 
@@ -21,40 +42,6 @@
         </v-btn>
     </v-app-bar>
 </template>
-
-<script>
-export default {
-    name: "AppBar",
-    props: {
-        theme: {
-            type: String,
-            required: false,
-        },
-    },
-    data() {
-        return {
-            windowTop: window.top.scrollY
-        };
-    },
-    methods: {
-        onScroll(e) {
-            this.windowTop = window.top.scrollY;
-        },
-        scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        },
-    },
-    mounted() {
-        window.addEventListener("scroll", this.onScroll)
-    },
-    beforeUnmount() {
-        window.removeEventListener("scroll", this.onScroll)
-    },
-};
-</script>
 
 <style scoped>
 .v-toolbar {

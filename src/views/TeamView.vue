@@ -1,41 +1,29 @@
+<script setup lang="ts">
+import AppBar from "@/components/AppBar.vue";
+import PokemonList from "@/components/PokemonList.vue";
+import { usePokemonStore } from "@/store/index";
+import { computed } from "vue";
+
+const store = usePokemonStore();
+
+await store.fetchPokemon();
+
+const filterPokemonByIdsInTeam = computed(() => {
+    return store.team.map(id => {
+        return store.pokemonList.find(p => p.id === id);
+    });
+});
+</script>
+
 <template>
     <AppBar :theme="'dark'" />
-    <v-container v-if="team" fluid class="bg animated fill-height">
+    <v-container fluid class="bg animated fill-height">
         <v-container>
             <h1>Mijn team</h1>
             <PokemonList :poke="filterPokemonByIdsInTeam" />
         </v-container>
     </v-container>
-    <LoaderScreen v-else />
 </template>
-
-<script>
-import PokemonList from "@/components/PokemonList.vue";
-import AppBar from "@/components/AppBar.vue";
-import { mapState, mapActions } from "vuex";
-import LoaderScreen from "@/components/LoaderScreen.vue";
-export default {
-    components: {
-        PokemonList,
-        AppBar,
-        LoaderScreen,
-    },
-    methods: {
-        ...mapActions(["fetchPokemon"]),
-    },
-    computed: {
-        ...mapState(["team"]),
-        filterPokemonByIdsInTeam() {
-            return this.$store.state.team.map(id => {
-                return this.$store.state.pokemon.find(p => p.id === id);
-            });
-        },
-    },
-    created() {
-        this.fetchPokemon();
-    },
-}
-</script>
 
 <style scoped>
 h1 {
