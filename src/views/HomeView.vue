@@ -1,6 +1,127 @@
+<script setup lang="ts">
+import AppBar from "@/components/AppBar.vue";
+import LoaderScreen from "@/components/LoaderScreen.vue";
+import PokemonList from "@/components/PokemonList.vue";
+import { usePokemonStore } from "@/store";
+import { computedEager } from "@vueuse/core";
+import { computed, ref } from "vue";
+
+const store = usePokemonStore();
+
+store.fetchPokemon();
+
+const pokemonList = computed(() => {
+  return store.pokemonList;
+});
+const namePokemon = ref('');
+const showFilters = ref(false);
+const sort = ref('numasc');
+const idSearch = ref(false);
+let types: string[] = [];
+
+const statePokemonFilteredByName = computed(() => {
+  return pokemonList.value.filter(pokemon => {
+    return pokemon.name.toLowerCase().includes(namePokemon.value.toLowerCase());
+  });
+})
+
+const availableTypesAndCount = computed(() => {
+  return statePokemonFilteredByName.value.reduce((acc: { [key: string]: number }, pokemon) => {
+    pokemon.types.forEach((type: { type: { name: string; }; }) => {
+      if (!acc[type.type.name as keyof typeof acc]) {
+        acc[type.type.name as keyof typeof acc] = 1;
+      } else {
+        acc[type.type.name as keyof typeof acc]++;
+      }
+    });
+    types.forEach(type => {
+      if (!acc[type as keyof typeof acc]) {
+        acc[type as keyof typeof acc] = 0;
+      }
+    });
+    return acc;
+  }, {});
+})
+
+const filterPokemonByType = computed(() => {
+  if (types.length === 0) {
+    return statePokemonFilteredByName.value;
+  }
+  return statePokemonFilteredByName.value.filter(pokemon => {
+    return pokemon.types.some((type: { type: { name: string; }; }) => {
+      return types.includes(type.type.name);
+    });
+  });
+})
+
+const filterPokemonById = computed(() => {
+  if (!namePokemon.value) {
+    return pokemonList.value;
+  }
+  return pokemonList.value.filter(pokemon => {
+    return pokemon.id.toString() === namePokemon.value;
+  });
+})
+
+const sortIcon = computedEager(() => {
+  if (sort.value === 'numasc') {
+    return 'mdi-sort-ascending';
+  } else if (sort.value === 'numdesc') {
+    return 'mdi-sort-descending';
+  } else if (sort.value === 'alphaasc') {
+    return 'mdi-sort-alphabetical-ascending';
+  } else if (sort.value === 'alphadesc') {
+    return 'mdi-sort-alphabetical-descending';
+  }
+  return 'mdi-sort-alphabetical-ascending';
+})
+
+const sortFilteredPokemon = computed(() => {
+  const pokemon = filterPokemonByType.value;
+  if (sort.value === 'numasc') {
+    return pokemon.sort((a, b) => {
+      return a.id - b.id;
+    });
+  } else if (sort.value === 'numdesc') {
+    return pokemon.sort((a, b) => {
+      return b.id - a.id;
+    });
+  } else if (sort.value === 'alphaasc') {
+    return pokemon.sort((a, b) => {
+      return a.name.localeCompare(b.name);
+    });
+  } else if (sort.value === 'alphadesc') {
+    return pokemon.sort((a, b) => {
+      return b.name.localeCompare(a.name);
+    });
+  }
+  return pokemon;
+})
+
+const toggleFilter = () => {
+  showFilters.value = !showFilters.value;
+}
+
+const toggleIdSearch = () => {
+  idSearch.value = !idSearch.value;
+}
+
+const toggleSort = () => {
+  if (sort.value === 'numasc') {
+    sort.value = 'numdesc';
+  } else if (sort.value === 'numdesc') {
+    sort.value = 'alphaasc';
+  } else if (sort.value === 'alphaasc') {
+    sort.value = 'alphadesc';
+  } else {
+    sort.value = 'numasc';
+  }
+}
+</script>
+
 <template>
   <AppBar />
-  <v-container v-if="pokemon">
+  <v-container v-if="pokemonList">
     <h1 class="my-3">Pokédex</h1>
     <v-text-field v-model="namePokemon" hide-details prepend-inner-icon="mdi-magnify" single-line variant="solo"
       clearable clear-icon="mdi-delete" density="compact" label="Pokémon zoeken" @click:prepend="toggleIdSearch"
@@ -25,129 +146,6 @@
   </v-container>
   <LoaderScreen v-else />
 </template>
-
-<script>
-import PokemonList from "@/components/PokemonList.vue";
-import AppBar from "@/components/AppBar.vue";
-import LoaderScreen from "@/components/LoaderScreen.vue";
-import { mapState, mapActions } from "vuex";
-export default {
-  components: {
-    PokemonList,
-    AppBar,
-    LoaderScreen,
-  },
-  data() {
-    return {
-      namePokemon: '',
-      showFilters: false,
-      showSort: false,
-      sort: 'numasc',
-      idSearch: false,
-      types: [],
-    };
-  },
-  methods: {
-    ...mapActions(["fetchPokemon"]),
-    toggleFilter() {
-      this.showFilters = !this.showFilters;
-    },
-    toggleIdSearch() {
-      this.idSearch = !this.idSearch;
-    },
-    toggleSort() {
-      if (this.sort === 'numasc') {
-        this.sort = 'numdesc';
-      } else if (this.sort === 'numdesc') {
-        this.sort = 'alphaasc';
-      } else if (this.sort === 'alphaasc') {
-        this.sort = 'alphadesc';
-      } else {
-        this.sort = 'numasc';
-      }
-    },
-  },
-  computed: {
-    ...mapState(["pokemon"]),
-    statePokemonFilteredByName() {
-      return this.$store.state.pokemon.filter(pokemon => {
-        return pokemon.name.toLowerCase().includes(this.namePokemon.toLowerCase());
-      });
-    },
-    availableTypesAndCount() {
-      return this.statePokemonFilteredByName.reduce((acc, pokemon) => {
-        pokemon.types.forEach(type => {
-          if (!acc[type.type.name]) {
-            acc[type.type.name] = 1;
-          } else {
-            acc[type.type.name]++;
-          }
-        });
-        this.types.forEach(type => {
-          if (!acc[type]) {
-            acc[type] = 0;
-          }
-        });
-        return acc;
-      }, {});
-    },
-    filterPokemonByType() {
-      if (this.types.length === 0) {
-        return this.statePokemonFilteredByName;
-      }
-      return this.statePokemonFilteredByName.filter(pokemon => {
-        return pokemon.types.some(type => {
-          return this.types.includes(type.type.name);
-        });
-      });
-    },
-    filterPokemonById() {
-      if (!this.namePokemon) {
-        return this.$store.state.pokemon;
-      }
-      return this.$store.state.pokemon.filter(pokemon => {
-        return pokemon.id == this.namePokemon;
-      });
-    },
-    sortIcon() {
-      if (this.sort === 'numasc') {
-        return 'mdi-sort-ascending';
-      } else if (this.sort === 'numdesc') {
-        return 'mdi-sort-descending';
-      } else if (this.sort === 'alphaasc') {
-        return 'mdi-sort-alphabetical-ascending';
-      } else if (this.sort === 'alphadesc') {
-        return 'mdi-sort-alphabetical-descending';
-      }
-      return 'mdi-sort-alphabetical-ascending';
-    },
-    sortFilteredPokemon() {
-      const pokemon = this.filterPokemonByType;
-      if (this.sort === 'numasc') {
-        return pokemon.sort((a, b) => {
-          return a.id - b.id;
-        });
-      } else if (this.sort === 'numdesc') {
-        return pokemon.sort((a, b) => {
-          return b.id - a.id;
-        });
-      } else if (this.sort === 'alphaasc') {
-        return pokemon.sort((a, b) => {
-          return a.name.localeCompare(b.name);
-        });
-      } else if (this.sort === 'alphadesc') {
-        return pokemon.sort((a, b) => {
-          return b.name.localeCompare(a.name);
-        });
-      }
-      return pokemon;
-    },
-  },
-  created() {
-    this.fetchPokemon();
-  },
-}
-</script>
 
 <style scoped>
 .v-text-field {

@@ -1,37 +1,33 @@
-import { createStore } from 'vuex'
+import { PokemonList } from '@/models/pokemonList'
+import { useStorage } from '@vueuse/core'
 import axios from 'axios'
-import createPersistedState from "vuex-persistedstate"
+import { defineStore } from 'pinia'
 
-export default createStore({
-  state: {
-    pokemon: [],
-    team: [] as number[],
-    favorites: [] as number[],
-  },
+export const usePokemonStore = defineStore({
+  id: 'appwise-be',
+  state: () => ({
+    pokemonList: useStorage('pokemon', [] as PokemonList[]),
+    team: useStorage('team', [] as number[]),
+    favorites: useStorage('favorites', [] as number[]),
+  }),
   getters: {
-    getPokemon: state => state.pokemon,
-    getTeam: state => state.team,
-    getFavorites: state => state.favorites,
-  },
-  mutations: {
-    SET_POKEMON(state, data) { state.pokemon = data; },
-    ADD_TO_TEAM(state, data) { state.team.push(data); },
-    REMOVE_FROM_TEAM(state, data) { state.team.splice(state.team.indexOf(data), 1); },
-    ADD_TO_FAVORITES(state, data) { state.favorites.push(data); },
-    REMOVE_FROM_FAVORITES(state, data) { state.favorites.splice(state.favorites.indexOf(data), 1); },
-    CLEAR_TEAM(state) { state.team = []; },
-    CLEAR_FAVORITES(state) { state.favorites = []; },
+    getPokemon(): any[] {
+      return this.pokemonList
+    },
+    getTeam(): number[] {
+      return this.team
+    },
+    getFavorites(): number[] {
+      return this.favorites
+    }
   },
   actions: {
-    async fetchPokemon({ commit }) {
-      await axios.get('https://stoplight.io/mocks/appwise-be/pokemon/57519009/pokemon').then(response => commit("SET_POKEMON", response.data));
-    },
-    addToTeam({ commit }, data) { commit("ADD_TO_TEAM", data); },
-    removeFromTeam({ commit }, data) { commit("REMOVE_FROM_TEAM", data); },
-    addToFavorites({ commit }, data) { commit("ADD_TO_FAVORITES", data); },
-    removeFromFavorites({ commit }, data) { commit("REMOVE_FROM_FAVORITES", data); },
+    async fetchPokemon() {
+      await axios.get('https://stoplight.io/mocks/appwise-be/pokemon/57519009/pokemon').then(response => this.pokemonList = response.data);
+    }
   },
-  modules: {
-  },
-  plugins: [createPersistedState()],
 })
+
+
+
+

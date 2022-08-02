@@ -1,21 +1,35 @@
+<script setup lang="ts">
+import PokemonType from "@/components/PokemonType.vue";
+import zeroPad from "@/utils/ZeroPad";
+import { defineProps } from "vue";
+
+defineProps({
+  poke: {
+    type: Object,
+    required: true,
+  },
+});
+
+</script>
+
 <template>
-  <v-card :href="`/pokemon/${pokemon.id}`" elevation="4" class="pa-3" min-width="270">
+  <v-card :href="`/pokemon/${poke.id}`" elevation="4" class="pa-3" min-width="270">
     <v-row no-gutters justify="center" align="center">
       <v-col cols=11>
         <v-row no-gutters>
           <v-col cols=3 xs=3 sm=2 align-self="center">
             <v-avatar width="100%" rounded="0">
-              <div v-if="pokemon.sprites.front_default">
-                <img class="avatar-pokemon" :src="pokemon.sprites.front_default" alt="" />
+              <div v-if="poke.sprites.front_default">
+                <img class="avatar-pokemon" :src="poke.sprites.front_default" alt="" />
               </div>
             </v-avatar>
           </v-col>
           <v-col cols=5 xs=5 sm=5>
-            <div class="text-capitalize font-weight-bold">{{ pokemon.name }}</div>
-            <div><span class="text-gray font-weight-light">Nr. {{ zeroPad() }}</span></div>
+            <div class="text-capitalize font-weight-bold">{{ poke.name }}</div>
+            <div><span class="text-gray font-weight-light">Nr. {{ zeroPad(poke.id, 3) }}</span></div>
           </v-col>
           <v-col cols=4 xs=4 sm=4>
-            <div class="d-inline mr-1" v-for="(type, index) in pokemon.types" :key="index">
+            <div class="d-inline mr-1" v-for="(type, index) in poke.types" :key="index">
               <PokemonType :type="type.type.name" />
             </div>
             <div></div>
@@ -30,36 +44,6 @@
     </v-row>
   </v-card>
 </template>
-
-<script>
-import PokemonType from "@/components/PokemonType.vue";
-import zeroPad from "@/utils/ZeroPad";
-export default {
-  props: { poke: Object },
-  name: "CardPokemon",
-  components: {
-    PokemonType,
-  },
-  data() {
-    return {
-      pokemon: {},
-      type: "",
-      number: "",
-    };
-  },
-  methods: {
-    async fetchPokemon() {
-      this.pokemon = this.poke;
-    },
-    zeroPad() {
-      return zeroPad(this.pokemon.id, 3);
-    }
-  },
-  created() {
-    this.fetchPokemon();
-  },
-};
-</script>
 
 <style scoped>
 .main-card {

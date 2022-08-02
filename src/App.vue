@@ -1,27 +1,27 @@
+<script setup lang="ts">
+import { watch } from 'vue';
+import { useRoute } from 'vue-router';
+import LoaderScreen from './components/LoaderScreen.vue';
+
+const route = useRoute();
+
+watch(() => route.meta.title, () => {
+  document.title = (route.meta.title as string) ?? "Loading...";
+})
+</script>
+
 <template>
   <v-app>
     <v-main class="pa-0">
-      <router-view />
+      <Suspense>
+        <router-view />
+        <template #fallback>
+          <LoaderScreen />
+        </template>
+      </Suspense>
     </v-main>
   </v-app>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: "App",
-  data() {
-    return {
-      //
-    };
-  },
-  watch: {
-    $route(to, from) {
-        document.title = to.meta.title || 'Loading...';
-    },
-}
-})
-</script>
 
 <style>
 @keyframes animate {

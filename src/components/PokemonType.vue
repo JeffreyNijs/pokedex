@@ -1,15 +1,18 @@
+<script setup lang="ts">
+import { defineProps } from "vue";
+defineProps({
+    type: {
+        type: String,
+        required: true,
+    },
+});
+</script>
+
 <template>
     <div :class="type" class="pkm-type">
         <span>{{ type }}</span>
     </div>
 </template>
-
-<script>
-export default {
-    props: { type: String },
-    name: "PokemonType",
-};
-</script>
 
 <style>
 .pkm-type {
